@@ -1,0 +1,19 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.streamlit/secrets.toml
+
+# Local run log (regenerates on every run)
+streamlit.log
+
+# Unused / unoptimized image sources — not referenced by the app, kept locally only.
+# Do NOT add a blanket assets/ ignore: hero.jpg, logo.png, and crops/ must ship.
+assets/pexels-skylake-20858785.jpg
+assets/pexels-altaf-shah-3143825-9709717.jpg
+assets/piyaset-shutterstock_2292508787-2000x1200.jpg
+assets/Gemini_Generated_Image_6ei8zy6ei8zy6ei8.png
+assets/Gemini_Generated_Image_dg617hdg617hdg61.png
+assets/Screenshot*.png
+assets/newFile-1.jpg

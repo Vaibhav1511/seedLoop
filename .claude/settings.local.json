@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//private/tmp/**)",
+      "Bash(rm -rf seedcand)",
+      "Bash(mkdir -p seedcand/oat seedcand/broccoli)",
+      "Bash(xargs -I{} curl -sL --max-time 40 -A \"Mozilla/5.0\" {} -o broccoli/b1.jpg)",
+      "Bash(xargs -I{} curl -sL --max-time 40 -A \"Mozilla/5.0\" {} -o broccoli/b2.jpg)",
+      "Bash(xargs -I{} curl -sL --max-time 40 -A \"Mozilla/5.0\" {} -o broccoli/b3.jpg)",
+      "Bash(file broccoli/*.jpg)",
+      "Bash(mv pages/6_Knowledge_Commons.py pages/5_Knowledge_Commons.py && ls pages/)",
+      "Read(//Users/vaibhavkapri/Library/Python/**)",
+      "Read(//opt/homebrew/lib/**)",
+      "Read(//usr/local/**)",
+      "Read(//Users/vaibhavkapri/.local/**)",
+      "Bash(venv/bin/python -m py_compile pages/4_My_Exchanges.py)",
+      "Bash(venv/bin/python -)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=1160,520 --default-background-color=FFFFFFFF --screenshot=/tmp/hero_preview.png file:///tmp/hero_preview.html)",
+      "Bash(echo \"exit: $?\")",
+      "Read(//tmp/**)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=1160,650 --default-background-color=FFFFFFFF --screenshot=/tmp/hero3_preview.png file:///tmp/hero3_preview.html)",
+      "Bash(grep -nA8 \"PILOT_STATS\" data.py)",
+      "Bash(grep -nA14 \"^SEEDS = {\" data.py)",
+      "Bash(grep -nE '^    \"[A-Z][^\"]+\": \\\\{$' data.py)",
+      "Bash(venv/bin/python -m py_compile Home.py)",
+      "Bash(venv/bin/python -c \"import ast,sys; ast.parse\\(open\\('Home.py'\\).read\\(\\)\\); print\\('parse OK'\\)\")",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=1140,1180 --default-background-color=FFFFFFFF --screenshot=/tmp/home_sections.png file:///tmp/home_sections.html)",
+      "Bash(echo \"shot: $?\")",
+      "Bash(venv/bin/python -c \"import streamlit as st; print\\('st.logo:', hasattr\\(st,'logo'\\)\\)\")",
+      "Bash(./venv/bin/pip freeze *)",
+      "Bash(./venv/bin/python -c \"import streamlit; print\\(streamlit.__version__\\)\")",
+      "Bash(git config *)",
+      "Bash(git --version)",
+      "Bash(git rm *)"
+    ],
+    "additionalDirectories": [
+      "/Users/vaibhavkapri/Documents/Learnings/seedRegistryApp/pages"
+    ]
+  }
+}

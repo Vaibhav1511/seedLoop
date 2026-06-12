@@ -1,0 +1,44 @@
+{
+  "carrot": {
+    "source": "Openverse",
+    "title": "Carrot (Daucus carota L.) at Alnarp",
+    "author": "Dag Endresen",
+    "license": "by",
+    "url": "https://www.flickr.com/photos/96039972@N00/4999056846"
+  },
+  "oat": {
+    "source": "Openverse",
+    "title": "Avena sativa 002",
+    "author": "H. Zell",
+    "license": "by",
+    "url": "https://commons.wikimedia.org/w/index.php?curid=9180071"
+  },
+  "runner_bean": {
+    "source": "Openverse",
+    "title": "Phaseolus coccineus",
+    "author": "Carl E Lewis",
+    "license": "by",
+    "url": "https://www.flickr.com/photos/65146221@N00/1470339988"
+  },
+  "lovage": {
+    "source": "Openverse",
+    "title": "Lovage-Flavor-Food_23058-480x360",
+    "author": "Public Domain Photos",
+    "license": "by",
+    "url": "https://www.flickr.com/photos/28958738@N06/4905066760"
+  },
+  "purple_sprouting_broccoli": {
+    "source": "Openverse",
+    "title": "Purple-sprouting broccoli",
+    "author": "Jonathan Billinger",
+    "license": "by-sa",
+    "url": "https://www.geograph.org.uk/photo/6020252"
+  },
+  "tomato": {
+    "source": "Openverse",
+    "title": "Tomato plant-1",
+    "author": "gkdavie",
+    "license": "by",
+    "url": "https://www.flickr.com/photos/16034871@N05/4774790803"
+  }
+}
