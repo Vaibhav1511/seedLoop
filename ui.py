@@ -1,5 +1,16 @@
+import base64
+from pathlib import Path
+
 import streamlit as st
 from data import STEWARD
+
+
+@st.cache_data
+def _logo_b64():
+    """Base64 of the SeedLoop lockup (icon + wordmark + tagline), cached for reuse
+    across the sidebar (every page) and the Home hero badge."""
+    logo_path = Path(__file__).parent / "assets" / "logo.png"
+    return base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
 
 
 def inject_theme():
@@ -68,10 +79,10 @@ def inject_theme():
     /* keep typed input text dark/legible against the pale field-fill inputs */
     section[data-testid="stSidebar"] input,
     section[data-testid="stSidebar"] textarea{ color:var(--peat) !important; }
-    .sidebar-brand{ font-family:'Fraunces',serif; font-size:1.7rem; font-weight:700;
-                    color:#F7F5EC; letter-spacing:.02em; margin:0; }
-    .sidebar-sub{ font-size:.72rem; text-transform:uppercase; letter-spacing:.14em;
-                  color:#BFCBA8; margin-top:2px; line-height:1.3; }
+    /* light chip so the logo's dark-green wordmark stays legible on the moss sidebar */
+    .sidebar-logo{ background:var(--parchment); border-radius:12px; padding:14px 10px 10px;
+                   margin:0 0 14px; text-align:center; }
+    .sidebar-logo img{ width:104px; height:auto; display:block; margin:0 auto; }
     .sidebar-rule{ border:none; border-top:1px solid rgba(247,245,236,.25); margin:14px 0 6px; }
     .sidebar-foot{ font-size:.74rem; color:#BFCBA8; line-height:1.5; margin-top:10px; }
 
@@ -109,6 +120,13 @@ def inject_theme():
     .btn-solid{ background:var(--barley); color:#2A2113; box-shadow:0 6px 18px rgba(0,0,0,.25); }
     .btn-ghost{ border:1.5px solid rgba(247,245,236,.7); color:#F7F5EC; }
 
+    /* ---- hero logo badge (Home only) -------------------------------------- */
+    /* Same reasoning as .sidebar-logo: the wordmark is dark green, so it needs its
+       own light chip to read against the dark hero photo/gradient behind it. */
+    .hero-logo{ position:absolute; top:24px; left:24px; background:var(--parchment);
+                border-radius:10px; padding:8px 12px 6px; box-shadow:0 6px 16px rgba(0,0,0,.22); }
+    .hero-logo img{ width:72px; height:auto; display:block; }
+
     /* ---- eyebrow pill ---------------------------------------------------- */
     .eyebrow{ display:inline-block; font-size:.72rem; letter-spacing:.18em;
               text-transform:uppercase; color:var(--barley);
@@ -128,21 +146,20 @@ def inject_theme():
     .step{ width:34px; height:34px; font-size:.95rem; }
 
     /* ---- section heading + dashed rule ----------------------------------- */
-    .section-head{ display:flex; align-items:baseline; gap:16px; margin:54px 0 6px; }
+    .section-head{ display:flex; align-items:baseline; gap:16px; margin:48px 0 6px; }
     .section-head h2{ font-size:1.9rem; font-weight:600; margin:0; }
     .section-head .tick{ flex:1; border-top:1px dashed #C9C4AC; transform:translateY(-6px); }
 
-    /* ---- field-strip stat band ------------------------------------------- */
-    .strips{ display:flex; border-radius:14px; overflow:hidden; margin:34px 0 8px;
+    /* ---- field-strip stat band -------------------------------------------- */
+    /* single moss tone (was 4 competing shades) so it reads as one band, not a
+       stripe, and sits quietly under the dark hero rather than fighting it. */
+    .strips{ display:flex; border-radius:14px; overflow:hidden; margin:48px 0 8px;
              box-shadow:0 2px 10px rgba(58,47,37,.08); }
-    .strip{ flex:1; padding:26px; }
-    .strip:nth-child(1){ background:#33502F; color:#F1EFDF; }
-    .strip:nth-child(2){ background:#4F7A45; color:#F1EFDF; }
-    .strip:nth-child(3){ background:#7A9A57; color:#23341E; }
-    .strip:nth-child(4){ background:#C9A24B; color:#2A2113; }
-    .strip .num{ font-family:'Fraunces',serif; font-size:2.6rem; font-weight:600; line-height:1; }
+    .strip{ flex:1; padding:26px; background:var(--moss); }
+    .strip .num{ font-family:'Fraunces',serif; font-size:2.6rem; font-weight:600;
+                 line-height:1; color:var(--barley); }
     .strip .lbl{ font-size:.74rem; text-transform:uppercase; letter-spacing:.13em;
-                 margin-top:8px; opacity:.85; }
+                 margin-top:8px; color:#F1EFDF; opacity:.85; }
 
     /* ---- loop card ------------------------------------------------------- */
     .loop-card{ background:var(--card); border:1px solid var(--card-bd); border-radius:14px;
@@ -169,7 +186,7 @@ def inject_theme():
 
     /* ---- quote band ------------------------------------------------------ */
     .quote{ background:var(--moss); border-radius:16px; padding:46px 52px;
-            margin:24px 0 8px; color:#EFEEDE; }
+            margin:48px 0 8px; color:#EFEEDE; }
     .quote blockquote{ font-family:'Fraunces',serif; font-size:1.5rem; line-height:1.45;
                        font-style:italic; font-weight:400; margin:0 0 16px; max-width:32ch; color:#F4F2E4; }
     .quote cite{ font-style:normal; font-size:.85rem; letter-spacing:.1em;
@@ -189,9 +206,13 @@ def render_sidebar():
     Render the SeedLoop brand block at the top of the sidebar (above the native nav,
     via the flex-order rule in inject_theme). Call this right after inject_theme().
     """
-    # Wordmark dropped — the logo masthead on the main column now carries the brand.
+    _logo = _logo_b64()
+    if _logo:
+        st.sidebar.markdown(
+            f'<div class="sidebar-logo"><img src="data:image/png;base64,{_logo}" alt="SeedLoop" /></div>',
+            unsafe_allow_html=True,
+        )
     st.sidebar.markdown(
-        '<p class="sidebar-sub">Midwest Biodistrict Seed Cooperative</p>'
         '<hr class="sidebar-rule">'
         '<p class="sidebar-foot">Member-governed<br>'
         'Clare · Galway · Limerick · Tipperary</p>',

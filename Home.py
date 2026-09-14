@@ -4,7 +4,7 @@ from pathlib import Path
 
 import streamlit as st
 from data import PILOT_STATS, list_seeds, get_seed
-from ui import render_footer, inject_theme, render_sidebar
+from ui import _logo_b64, render_footer, inject_theme, render_sidebar
 
 # Page configuration (must be the first Streamlit command)
 st.set_page_config(
@@ -17,20 +17,10 @@ st.set_page_config(
 inject_theme()
 render_sidebar()
 
-# SeedLoop logo masthead — sits on the light parchment column (the logo's dark
-# wordmark reads well on light, not on the moss sidebar). Skips if absent.
-_logo = Path(__file__).parent / "assets" / "logo.png"
-if _logo.exists():
-    _logo_b64 = base64.b64encode(_logo.read_bytes()).decode("ascii")
-    st.markdown(
-        f'<div style="text-align:left;margin:0 0 18px 0;">'
-        f'<img src="data:image/png;base64,{_logo_b64}" alt="SeedLoop" '
-        f'style="width:118px;height:auto;" /></div>',
-        unsafe_allow_html=True,
-    )
-
 # Hero — photo with a left-to-right moss gradient; eyebrow + headline + subcopy on top.
 # Falls back to a solid moss banner if the photo is missing so the page never breaks.
+# The logo lives inside the hero itself now (top-left badge, on its own light chip so
+# the dark wordmark stays legible) instead of floating alone above it.
 _hero = Path(__file__).parent / "assets" / "hero.jpg"
 if _hero.exists():
     _hero_b64 = base64.b64encode(_hero.read_bytes()).decode("ascii")
@@ -38,10 +28,17 @@ if _hero.exists():
 else:
     _photo = ""
 
+_logo = _logo_b64()
+_logo_badge = (
+    f'<div class="hero-logo"><img src="data:image/png;base64,{_logo}" alt="SeedLoop" /></div>'
+    if _logo else ""
+)
+
 st.markdown(
     f'<div style="position:relative;border-radius:18px;overflow:hidden;padding:72px 56px 64px;'
-    f'margin:0 0 16px 0;background:linear-gradient(105deg, rgba(35,52,30,.88) 0%, '
+    f'margin:0 0 24px 0;background:linear-gradient(105deg, rgba(35,52,30,.88) 0%, '
     f'rgba(35,52,30,.55) 55%, rgba(35,52,30,.15) 100%){_photo}, #2E4A2C;">'
+    f'{_logo_badge}'
     f'<span class="eyebrow">Farmer-owned · Member-governed</span>'
     f'<h1 style="color:#F7F5EC;font-size:clamp(2.4rem,5vw,3.6rem);line-height:1.05;'
     f'max-width:14ch;margin:22px 0 16px;">Every seed has a '
