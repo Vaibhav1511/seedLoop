@@ -4,12 +4,8 @@
 > the feel of a cooperative's annual report, not a SaaS landing page.
 > SeedLoop — the Midwest Biodistrict Seed Cooperative.
 
-> **Status (2026-06-10):** This document defines the **target** design system
-> (moss + barley + parchment, Fraunces + Public Sans). It supersedes the earlier
-> sage/cream system. The live code (`ui.py` → `inject_theme()`, `Home.py`, and
-> `pages/`) still implements the previous sage palette — re-skinning to this spec
-> is a follow-up task. Until then, treat this as the source of intent, not a
-> description of what currently renders.
+> **Status (2026-09-14):** The live code (`ui.py` → `inject_theme()`, `Home.py`,
+> and `pages/`) implements this design system — source of truth: `ui.py`.
 
 ---
 
@@ -328,6 +324,4 @@ SeedLoop UI:
 
 ---
 
-*Target spec for SeedLoop. When the app is re-skinned to this system, update
-`ui.py` → `inject_theme()` to match, and restore the "Source of truth: ui.py"
-footer here.*
+*Source of truth: `ui.py` → `inject_theme()`.*

@@ -128,7 +128,9 @@ def inject_theme():
     .hero-logo img{ width:72px; height:auto; display:block; }
 
     /* ---- eyebrow pill ---------------------------------------------------- */
-    .eyebrow{ display:inline-block; font-size:.72rem; letter-spacing:.18em;
+    /* margin-top clears the absolutely-positioned .hero-logo badge (top:24px,
+       ~86px tall), which otherwise overlaps/clips this pill's left edge. */
+    .eyebrow{ display:inline-block; margin-top:56px; font-size:.72rem; letter-spacing:.18em;
               text-transform:uppercase; color:var(--barley);
               border:1px solid rgba(201,162,75,.6); border-radius:999px; padding:5px 14px; }
 
@@ -164,10 +166,10 @@ def inject_theme():
     /* ---- loop card ------------------------------------------------------- */
     .loop-card{ background:var(--card); border:1px solid var(--card-bd); border-radius:14px;
                 padding:24px 22px 20px; position:relative; height:100%; }
-    .loop-card::after{ content:'\2192'; position:absolute; right:-15px; top:50%;
+    .loop-card::after{ content:'\\2192'; position:absolute; right:-15px; top:50%;
                        transform:translateY(-50%); color:var(--barley); font-size:1.3rem;
                        font-weight:700; z-index:2; }
-    .loop-card.closing::after{ content:'\21BA'; right:14px; top:14px; transform:none; opacity:.6; }
+    .loop-card.closing::after{ content:'\\21BA'; right:14px; top:14px; transform:none; opacity:.6; }
     .loop-card .step{ margin-bottom:14px; }
     .loop-card h3,.loop-card h4{ font-family:'Fraunces',serif; font-size:1.12rem;
                                  margin:0 0 8px; font-weight:600; }
