@@ -6,18 +6,12 @@ from data import STEWARD
 
 
 @st.cache_data
-def _logo_b64():
-    """Base64 of the full-colour SeedLoop lockup — for light/parchment surfaces."""
-    logo_path = Path(__file__).parent / "assets" / "logo.png"
-    return base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
-
-
-@st.cache_data
-def _logo_reversed_b64():
-    """Base64 of the flat cream knockout of the lockup — for dark surfaces (moss
-    sidebar, hero photo). Sits directly on the dark background with no card behind
-    it, unlike the full-colour mark which needs a light chip to stay legible."""
-    logo_path = Path(__file__).parent / "assets" / "logo-reversed.png"
+def _logo_icon_b64():
+    """Base64 of the full-colour SeedLoop icon (cropped from the lockup, wordmark
+    excluded). Sits inside a small parchment medallion on dark surfaces (moss
+    sidebar, hero photo) — the wordmark itself is set as real HTML text alongside
+    it, rather than baked into a raster image, so it stays crisp at any size."""
+    logo_path = Path(__file__).parent / "assets" / "logo-icon.png"
     return base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
 
 
@@ -87,9 +81,18 @@ def inject_theme():
     /* keep typed input text dark/legible against the pale field-fill inputs */
     section[data-testid="stSidebar"] input,
     section[data-testid="stSidebar"] textarea{ color:var(--peat) !important; }
-    /* reversed (cream knockout) mark sits directly on the moss — no card behind it */
+    /* full-colour icon in a small circular parchment medallion — a seal/emblem,
+       not a card — so its own linework and colour stay intact; the wordmark is
+       real text beside it (crisp at any size, unlike the old baked-in raster type). */
+    .logo-medallion{ width:96px; height:96px; border-radius:50%; background:var(--parchment);
+                      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+                      box-shadow:0 4px 14px rgba(0,0,0,.18); margin:0 auto; }
+    .logo-medallion img{ width:76px; height:auto; display:block; }
     .sidebar-logo{ margin:4px 0 18px; text-align:center; }
-    .sidebar-logo img{ width:132px; height:auto; display:block; margin:0 auto; }
+    .sidebar-logo .wordmark{ font-family:'Fraunces',serif; font-weight:700; font-size:1.4rem;
+                              color:#F7F5EC; margin:12px 0 2px; }
+    .sidebar-logo .tagline{ font-size:.66rem; text-transform:uppercase; letter-spacing:.14em;
+                             color:#BFCBA8; }
     .sidebar-rule{ border:none; border-top:1px solid rgba(247,245,236,.25); margin:14px 0 6px; }
     .sidebar-foot{ font-size:.74rem; color:#BFCBA8; line-height:1.5; margin-top:10px; }
 
@@ -128,11 +131,14 @@ def inject_theme():
     .btn-ghost{ border:1.5px solid rgba(247,245,236,.7); color:#F7F5EC; }
 
     /* ---- hero logo badge (Home only) -------------------------------------- */
-    /* Reversed (cream knockout) mark, same as the sidebar — sits straight on the
-       hero's dark gradient corner with a soft drop-shadow for crispness, no card. */
-    .hero-logo{ position:absolute; top:28px; left:28px; }
-    .hero-logo img{ width:100px; height:auto; display:block;
-                     filter:drop-shadow(0 2px 8px rgba(0,0,0,.35)); }
+    /* Small horizontal lockup: the same full-colour medallion as the sidebar,
+       sized down, plus the wordmark as real text — sits straight on the hero's
+       dark gradient corner, no card around the text. */
+    .hero-logo{ position:absolute; top:28px; left:28px; display:flex; align-items:center; gap:14px; }
+    .hero-logo .logo-medallion{ width:64px; height:64px; margin:0; }
+    .hero-logo .logo-medallion img{ width:50px; }
+    .hero-logo .wordmark{ font-family:'Fraunces',serif; font-weight:700; font-size:1.2rem;
+                           color:#F7F5EC; text-shadow:0 2px 8px rgba(0,0,0,.35); }
 
     /* ---- eyebrow pill ---------------------------------------------------- */
     /* margin-top clears the absolutely-positioned .hero-logo badge (top:24px,
@@ -215,10 +221,14 @@ def render_sidebar():
     Render the SeedLoop brand block at the top of the sidebar (above the native nav,
     via the flex-order rule in inject_theme). Call this right after inject_theme().
     """
-    _logo = _logo_reversed_b64()
+    _logo = _logo_icon_b64()
     if _logo:
         st.sidebar.markdown(
-            f'<div class="sidebar-logo"><img src="data:image/png;base64,{_logo}" alt="SeedLoop" /></div>',
+            f'<div class="sidebar-logo">'
+            f'<div class="logo-medallion"><img src="data:image/png;base64,{_logo}" alt="" /></div>'
+            f'<div class="wordmark">SeedLoop</div>'
+            f'<div class="tagline">Midwest Biodistrict Seed Cooperative</div>'
+            f'</div>',
             unsafe_allow_html=True,
         )
     st.sidebar.markdown(

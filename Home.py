@@ -4,7 +4,7 @@ from pathlib import Path
 
 import streamlit as st
 from data import PILOT_STATS, list_seeds, get_seed
-from ui import _logo_reversed_b64, render_footer, inject_theme, render_sidebar
+from ui import _logo_icon_b64, render_footer, inject_theme, render_sidebar
 
 # Page configuration (must be the first Streamlit command)
 st.set_page_config(
@@ -19,8 +19,8 @@ render_sidebar()
 
 # Hero — photo with a left-to-right moss gradient; eyebrow + headline + subcopy on top.
 # Falls back to a solid moss banner if the photo is missing so the page never breaks.
-# The logo lives inside the hero itself now (top-left badge, on its own light chip so
-# the dark wordmark stays legible) instead of floating alone above it.
+# The logo lives inside the hero itself now (top-left badge: a small full-colour
+# medallion + the wordmark as real text) instead of floating alone above it.
 _hero = Path(__file__).parent / "assets" / "hero.jpg"
 if _hero.exists():
     _hero_b64 = base64.b64encode(_hero.read_bytes()).decode("ascii")
@@ -28,9 +28,12 @@ if _hero.exists():
 else:
     _photo = ""
 
-_logo = _logo_reversed_b64()
+_logo = _logo_icon_b64()
 _logo_badge = (
-    f'<div class="hero-logo"><img src="data:image/png;base64,{_logo}" alt="SeedLoop" /></div>'
+    f'<div class="hero-logo">'
+    f'<div class="logo-medallion"><img src="data:image/png;base64,{_logo}" alt="" /></div>'
+    f'<div class="wordmark">SeedLoop</div>'
+    f'</div>'
     if _logo else ""
 )
 
