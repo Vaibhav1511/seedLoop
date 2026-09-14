@@ -7,9 +7,17 @@ from data import STEWARD
 
 @st.cache_data
 def _logo_b64():
-    """Base64 of the SeedLoop lockup (icon + wordmark + tagline), cached for reuse
-    across the sidebar (every page) and the Home hero badge."""
+    """Base64 of the full-colour SeedLoop lockup — for light/parchment surfaces."""
     logo_path = Path(__file__).parent / "assets" / "logo.png"
+    return base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
+
+
+@st.cache_data
+def _logo_reversed_b64():
+    """Base64 of the flat cream knockout of the lockup — for dark surfaces (moss
+    sidebar, hero photo). Sits directly on the dark background with no card behind
+    it, unlike the full-colour mark which needs a light chip to stay legible."""
+    logo_path = Path(__file__).parent / "assets" / "logo-reversed.png"
     return base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
 
 
@@ -79,13 +87,9 @@ def inject_theme():
     /* keep typed input text dark/legible against the pale field-fill inputs */
     section[data-testid="stSidebar"] input,
     section[data-testid="stSidebar"] textarea{ color:var(--peat) !important; }
-    /* light chip so the logo's dark-green wordmark stays legible on the moss sidebar.
-       width:fit-content + margin:auto keeps it a small centred badge instead of
-       stretching to the full sidebar width (the flex column's default cross-axis
-       stretch, which was making this read as a big flat cream slab). */
-    .sidebar-logo{ background:var(--parchment); border-radius:12px; padding:14px 18px 10px;
-                   margin:0 auto 14px; width:fit-content; text-align:center; }
-    .sidebar-logo img{ width:104px; height:auto; display:block; margin:0 auto; }
+    /* reversed (cream knockout) mark sits directly on the moss — no card behind it */
+    .sidebar-logo{ margin:4px 0 18px; text-align:center; }
+    .sidebar-logo img{ width:132px; height:auto; display:block; margin:0 auto; }
     .sidebar-rule{ border:none; border-top:1px solid rgba(247,245,236,.25); margin:14px 0 6px; }
     .sidebar-foot{ font-size:.74rem; color:#BFCBA8; line-height:1.5; margin-top:10px; }
 
@@ -124,11 +128,11 @@ def inject_theme():
     .btn-ghost{ border:1.5px solid rgba(247,245,236,.7); color:#F7F5EC; }
 
     /* ---- hero logo badge (Home only) -------------------------------------- */
-    /* Same reasoning as .sidebar-logo: the wordmark is dark green, so it needs its
-       own light chip to read against the dark hero photo/gradient behind it. */
-    .hero-logo{ position:absolute; top:24px; left:24px; background:var(--parchment);
-                border-radius:10px; padding:8px 12px 6px; box-shadow:0 3px 10px rgba(0,0,0,.15); }
-    .hero-logo img{ width:72px; height:auto; display:block; }
+    /* Reversed (cream knockout) mark, same as the sidebar — sits straight on the
+       hero's dark gradient corner with a soft drop-shadow for crispness, no card. */
+    .hero-logo{ position:absolute; top:28px; left:28px; }
+    .hero-logo img{ width:100px; height:auto; display:block;
+                     filter:drop-shadow(0 2px 8px rgba(0,0,0,.35)); }
 
     /* ---- eyebrow pill ---------------------------------------------------- */
     /* margin-top clears the absolutely-positioned .hero-logo badge (top:24px,
@@ -211,7 +215,7 @@ def render_sidebar():
     Render the SeedLoop brand block at the top of the sidebar (above the native nav,
     via the flex-order rule in inject_theme). Call this right after inject_theme().
     """
-    _logo = _logo_b64()
+    _logo = _logo_reversed_b64()
     if _logo:
         st.sidebar.markdown(
             f'<div class="sidebar-logo"><img src="data:image/png;base64,{_logo}" alt="SeedLoop" /></div>',

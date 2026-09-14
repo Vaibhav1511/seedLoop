@@ -4,7 +4,7 @@ from pathlib import Path
 
 import streamlit as st
 from data import PILOT_STATS, list_seeds, get_seed
-from ui import _logo_b64, render_footer, inject_theme, render_sidebar
+from ui import _logo_reversed_b64, render_footer, inject_theme, render_sidebar
 
 # Page configuration (must be the first Streamlit command)
 st.set_page_config(
@@ -28,7 +28,7 @@ if _hero.exists():
 else:
     _photo = ""
 
-_logo = _logo_b64()
+_logo = _logo_reversed_b64()
 _logo_badge = (
     f'<div class="hero-logo"><img src="data:image/png;base64,{_logo}" alt="SeedLoop" /></div>'
     if _logo else ""
