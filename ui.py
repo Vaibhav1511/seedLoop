@@ -41,7 +41,13 @@ def inject_theme():
         color: var(--peat);
         font-family: 'Public Sans', sans-serif;
     }
-    [data-testid="stToolbar"]{ display:none; }
+    /* Hide the deploy/menu icons but NOT the whole toolbar: stExpandSidebarButton
+       (the only way to reopen the sidebar on mobile, where it auto-collapses)
+       lives inside stToolbar too, so display:none on stToolbar itself was
+       silently breaking mobile navigation. */
+    [data-testid="stToolbarActions"]{ display:none; }
+    [data-testid="stMainMenu"]{ display:none; }
+    [data-testid="stAppDeployButton"]{ display:none; }
     #MainMenu{ visibility:hidden; }
     footer{ visibility:hidden; }
     /* header kept transparent (not removed) so the sidebar toggle still works */
